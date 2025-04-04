@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPK Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Mas um back-end mexendo no front! */
+        .showcase-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #1a1a1a;
+            touch-action: pan-y pinch-zoom;
+        }
+
+        .showcase-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .showcase-item {
+            flex: 0 0 100%;
+            min-width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="showcase-container">
+        <div class="showcase-track">
+            <div class="showcase-item">
+                <img src="/src/1383735.jpg" class="showcase-image">
+                <div class="overlay">
+                    <div class="logo">LPK Digital</div>
+                    <div class="subtitle">Transformando ideias em realidade digital</div>
+                </div>
+            </div>
+
+            <div class="showcase-item">
+                <img src="/src/1288655.png" class="showcase-image">
+                <div class="overlay">
+                    <div class="logo">Inovação</div>
+                    <div class="subtitle">Soluções digitais do futuro</div>
+                </div>
+            </div>
+
+            <div class="showcase-item">
+                <img src="/src/1372162.jpeg" class="showcase-image">
+                <div class="overlay">
+                    <div class="logo">Tecnologia</div>
+                    <div class="subtitle">Tecnologia de ponta para seu negócio</div>
+                </div>
+            </div>
+
+            <div class="showcase-item">
+                <img src="/src/1372163.jpeg" class="showcase-image">
+                <div class="overlay">
+                    <div class="logo">Resultados</div>
+                    <div class="subtitle">Entregando valor real</div>
+                </div>
+            </div>
+
+            <div class="showcase-item">
+                <img src="/src/1389936.jpg" class="showcase-image">
+                <div class="overlay">
+                    <div class="logo">Resultados</div>
+                    <div class="subtitle">Entregando valor real</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const track = document.querySelector('.showcase-track');
+        const slides = document.querySelectorAll('.showcase-item');
+        const totalSlides = slides.length;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        function updateSlidePosition(offset = 0) {
+            const position = (currentSlide * -100) + offset;
+            track.style.transform = `translateX(${position}%)`;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlidePosition();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlidePosition();
+        }
+
+        // caso haja corre kkk por que so jesus sabe disso
+        track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            track.style.transition = 'none';
+        });
+
+        track.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+
+            currentX = e.touches[0].clientX;
+            const diff = currentX - startX;
+            const percentageMoved = (diff / window.innerWidth) * 100;
+
+            updateSlidePosition(percentageMoved);
+        });
+
+        track.addEventListener('touchend', (e) => {
+            isDragging = false;
+            track.style.transition = 'transform 0.5s ease-in-out';
+
+            const diff = currentX - startX;
+            const threshold = window.innerWidth * 0.2;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    prevSlide();
+                } else {
+                    nextSlide();
+                }
+            } else {
+                updateSlidePosition();
+            }
+        });
+
+        // auto 5 segundo
+        setInterval(nextSlide, 5000);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
